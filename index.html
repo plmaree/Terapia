@@ -493,8 +493,39 @@
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
         .reveal-delay-4 { transition-delay: 0.4s; }
-        /* ===== Notification ===== */
-        .cart-notification {
+/* ===== Floating Action Buttons ===== */
+    .float-buttons {
+        position: fixed; bottom: 30px; right: 30px; z-index: 999;
+        display: flex; flex-direction: column; gap: 10px;
+        opacity: 0; visibility: hidden; transform: translateY(20px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .float-buttons.visible {
+        opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    .float-btn {
+        width: 56px; height: 56px; border-radius: 50%;
+        background: linear-gradient(135deg, var(--lavender), var(--pink));
+        border: none; color: white; font-size: 1.5rem;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 4px 15px rgba(155, 126, 200, 0.3);
+        transition: all 0.3s;
+        position: relative;
+    }
+    .float-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(155, 126, 200, 0.4);
+    }
+    .float-btn:active { transform: translateY(0) scale(0.95); }
+    .cart-btn-badge {
+        position: absolute; top: -8px; right: -8px;
+        background: white; color: var(--lavender); border-radius: 50%;
+        min-width: 20px; height: 20px; font-size: 0.7rem; font-weight: 800;
+        display: flex; align-items: center; justify-content: center;
+        padding: 2px;
+    }
+
+/* ===== Notification ===== */
             position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
             background: linear-gradient(135deg, var(--lavender), var(--pink));
             color: white; padding: 1rem 1.5rem; border-radius: 16px;
@@ -796,6 +827,17 @@
 </footer>
 <!-- Notification container -->
 <div id="notificationContainer"></div>
+
+<!-- Floating Action Buttons -->
+<div class="float-buttons" id="floatButtons">
+    <button class="float-btn" id="scrollUpBtn" title="Наверх">
+        ↑
+    </button>
+    <button class="float-btn cart-btn" id="cartBtn" title="Корзина">
+        🛒
+        <span class="cart-btn-badge" id="cartBtnBadge">0</span>
+    </button>
+</div>
 <script>
 // ============ DATA ============
 const bestProducts = [
@@ -1098,6 +1140,49 @@ function resetOrder() {
     document.getElementById('orderSuccessCard').style.display = 'none';
     updateCartUI();
 }
+
+// ============ FLOATING BUTTONS ============
+const SCROLL_THRESHOLD = 200; // Порог прокрутки в пикселях
+let lastScrollY = 0;
+
+// Функция для показа/скрытия кнопок
+function updateFloatButtons() {
+    const floatButtons = document.getElementById('floatButtons');
+    if (window.scrollY > SCROLL_THRESHOLD) {
+        floatButtons.classList.add('visible');
+    } else {
+        floatButtons.classList.remove('visible');
+    }
+}
+
+// Функция прокрутки вверх
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Функция прокрутки к корзине
+function scrollToCart() {
+    const orderSection = document.getElementById('order');
+    if (orderSection) {
+        orderSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Обновление badge корзины в плавающей кнопке
+function updateCartBtnBadge() {
+    const badge = document.getElementById('cartBtnBadge');
+    const total = getTotalItems();
+    badge.textContent = total;
+    badge.style.display = total > 0 ? 'flex' : 'none';
+}
+
+// Обновление существующего кода
+const originalUpdateCartUI = updateCartUI;
+updateCartUI = function() {
+    originalUpdateCartUI();
+    updateCartBtnBadge();
+}
+
 // ============ INIT ============
 document.addEventListener('DOMContentLoaded', () => {
     createPetals();
@@ -1105,6 +1190,16 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTab1();
     renderOrderCart();
     revealOnScroll();
+
+    // Добавляем обработчики событий для новых кнопок
+    document.getElementById('scrollUpBtn').addEventListener('click', scrollToTop);
+    document.getElementById('cartBtn').addEventListener('click', scrollToCart);
+
+    // Добавляем слушатель прокрутки
+    window.addEventListener('scroll', updateFloatButtons);
+
+    // Обновляем badge при инициализации
+    updateCartBtnBadge();
 });
 window.addEventListener('scroll', revealOnScroll);
 </script>
