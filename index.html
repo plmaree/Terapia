@@ -144,81 +144,55 @@
             background-size: 400% 400%;
             animation: gradientShift 12s ease infinite;
             position: relative; overflow: hidden;
+            will-change: background-position;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        /* Mobile: slower animation, smaller bg size for perf */
+        @media (max-width: 768px) {
+            .hero {
+                background-size: 300% 300%;
+                animation-duration: 16s;
+            }
+            .hero-orb {
+                filter: blur(40px) !important;
+            }
+        }
         /* Hero floating orbs */
         .hero-orb {
             position: absolute; border-radius: 50%; pointer-events: none;
             filter: blur(60px); will-change: transform;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
         @keyframes floatOrb1 {
-            0%,100%{transform:translate(0,0) scale(1)}
-            25%{transform:translate(80px,-60px) scale(1.1)}
-            50%{transform:translate(-30px,80px) scale(0.9)}
-            75%{transform:translate(60px,30px) scale(1.05)}
+            0%,100%{transform:translate3d(0,0,0) scale(1)}
+            25%{transform:translate3d(80px,-60px,0) scale(1.1)}
+            50%{transform:translate3d(-30px,80px,0) scale(0.9)}
+            75%{transform:translate3d(60px,30px,0) scale(1.05)}
         }
         @keyframes floatOrb2 {
-            0%,100%{transform:translate(0,0) scale(1)}
-            25%{transform:translate(-70px,50px) scale(0.95)}
-            50%{transform:translate(50px,-40px) scale(1.1)}
-            75%{transform:translate(-30px,-60px) scale(1)}
+            0%,100%{transform:translate3d(0,0,0) scale(1)}
+            25%{transform:translate3d(-70px,50px,0) scale(0.95)}
+            50%{transform:translate3d(50px,-40px,0) scale(1.1)}
+            75%{transform:translate3d(-30px,-60px,0) scale(1)}
         }
         @keyframes floatOrb3 {
-            0%,100%{transform:translate(0,0) scale(1)}
-            33%{transform:translate(60px,70px) scale(1.05)}
-            66%{transform:translate(-80px,-20px) scale(0.95)}
+            0%,100%{transform:translate3d(0,0,0) scale(1)}
+            33%{transform:translate3d(60px,70px,0) scale(1.05)}
+            66%{transform:translate3d(-80px,-20px,0) scale(0.95)}
         }
         @keyframes floatOrb4 {
-            0%,100%{transform:translate(0,0) scale(1)}
-            20%{transform:translate(-50px,-70px) scale(1.08)}
-            40%{transform:translate(70px,20px) scale(0.92)}
-            60%{transform:translate(-20px,60px) scale(1.05)}
-            80%{transform:translate(40px,-40px) scale(0.97)}
-        }
-        /* Light rays */
-        .hero-light-ray {
-            position: absolute; pointer-events: none;
-            width: 2px; height: 200px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.15), rgba(255,255,255,0));
-            transform-origin: top center;
-        }
-        @keyframes rayPulse {
-            0%,100%{opacity:0.3; transform:scaleY(1) rotate(var(--ray-angle))}
-            50%{opacity:0.6; transform:scaleY(1.2) rotate(var(--ray-angle))}
-        }
-
-        /* ===== Falling Petals (site-wide) ===== */
-        .falling-petals-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 100; overflow: hidden;
-        }
-        .falling-petal {
-            position: absolute; top: -30px;
-            border-radius: 50% 0 50% 50%;
-            opacity: 0; will-change: transform;
-        }
-        @keyframes petalFall1 {
-            0%{transform:translateY(-20px) rotate(0deg) translateX(0); opacity:0}
-            8%{opacity:0.45}
-            50%{transform:translateY(50vh) rotate(360deg) translateX(80px); opacity:0.35}
-            100%{transform:translateY(105vh) rotate(720deg) translateX(20px); opacity:0}
-        }
-        @keyframes petalFall2 {
-            0%{transform:translateY(-20px) rotate(0deg) translateX(0); opacity:0}
-            8%{opacity:0.4}
-            50%{transform:translateY(50vh) rotate(-300deg) translateX(-60px); opacity:0.3}
-            100%{transform:translateY(105vh) rotate(-600deg) translateX(-30px); opacity:0}
-        }
-        @keyframes petalFall3 {
-            0%{transform:translateY(-20px) rotate(0deg) translateX(0); opacity:0}
-            10%{opacity:0.5}
-            30%{transform:translateY(30vh) rotate(180deg) translateX(50px)}
-            60%{transform:translateY(60vh) rotate(400deg) translateX(-40px); opacity:0.35}
-            100%{transform:translateY(105vh) rotate(660deg) translateX(10px); opacity:0}
+            0%,100%{transform:translate3d(0,0,0) scale(1)}
+            20%{transform:translate3d(-50px,-70px,0) scale(1.08)}
+            40%{transform:translate3d(70px,20px,0) scale(0.92)}
+            60%{transform:translate3d(-20px,60px,0) scale(1.05)}
+            80%{transform:translate3d(40px,-40px,0) scale(0.97)}
         }
 
         /* ===== Hero Content ===== */
@@ -612,17 +586,11 @@
 </nav>
 <div class="mobile-menu-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
 
-<!-- Falling Petals (site-wide) -->
-<div class="falling-petals-container" id="fallingPetals"></div>
-
 <!-- Hero Section -->
 <section class="hero" id="hero">
     <div id="hero-orbs-container" style="position:absolute;inset:0;overflow:hidden;z-index:1;"></div>
     <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2;">
         <div style="max-width: 900px; margin: 0 auto; padding: 6rem 1.5rem 3rem; text-align: center;">
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.7); padding: 0.5rem 1.2rem; border-radius: 50px; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--dark-secondary); backdrop-filter: blur(10px); animation: fadeUp 0.8s 0.2s cubic-bezier(0.4,0,0.2,1) forwards; opacity: 0;">
-                <span>🎬</span> YouTube: Цветочная терапия с Натальей
-            </div>
             <h1 class="hero-title" style="margin: 0 auto;">Гортензии, которые<br>вдохновляют и исцеляют</h1>
             <p class="hero-subtitle" style="font-size: clamp(1rem, 2vw, 1.25rem); color: var(--dark-secondary); margin: 1.5rem auto 2rem; max-width: 600px; line-height: 1.7;">
                 Уникальная коллекция гортензий от блогера Натальи. Каждый цветок — часть терапии красотой, выращенный с любовью и заботой 🌿
@@ -644,6 +612,12 @@
                     <div class="font-display" style="font-size: 1.6rem; font-weight: 800; color: var(--blue);">7 лет</div>
                     <div style="font-size: 0.8rem; color: #8a7a9a;">опыта</div>
                 </div>
+            </div>
+            <div class="hero-subtitle" style="margin-top: 2rem; animation-delay: 1.3s;">
+                <a href="https://youtube.com" target="_blank" class="yt-badge">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    Смотреть на YouTube
+                </a>
             </div>
         </div>
     </div>
@@ -685,16 +659,10 @@
                 </div>
             </div>
         </div>
-        <div class="reveal" style="text-align: center;">
-            <a href="https://youtube.com" target="_blank" class="yt-badge">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                Смотреть на YouTube
-            </a>
-        </div>
     </div>
 </section>
 
-<!-- Wave transition (kept) -->
+<!-- Wave transition -->
 <div style="background: white;">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style="display: block; width: 100%; height: 60px;">
         <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" fill="#FDF6F0"/>
@@ -958,7 +926,13 @@ function closeMobileMenu() {
 // ============ HERO ORBS ============
 function createHeroOrbs() {
     const container = document.getElementById('hero-orbs-container');
-    const orbs = [
+    const isMobile = window.innerWidth <= 768;
+    const orbs = isMobile ? [
+        { size: 250, color: 'rgba(155, 126, 200, 0.2)', x: '5%', y: '15%', anim: 'floatOrb1', dur: 24 },
+        { size: 200, color: 'rgba(232, 160, 191, 0.18)', x: '60%', y: '55%', anim: 'floatOrb2', dur: 28 },
+        { size: 180, color: 'rgba(123, 167, 212, 0.18)', x: '70%', y: '10%', anim: 'floatOrb3', dur: 22 },
+        { size: 220, color: 'rgba(142, 205, 168, 0.12)', x: '20%', y: '65%', anim: 'floatOrb4', dur: 26 },
+    ] : [
         { size: 350, color: 'rgba(155, 126, 200, 0.25)', x: '5%', y: '15%', anim: 'floatOrb1', dur: 20 },
         { size: 280, color: 'rgba(232, 160, 191, 0.2)', x: '65%', y: '55%', anim: 'floatOrb2', dur: 25 },
         { size: 220, color: 'rgba(123, 167, 212, 0.22)', x: '75%', y: '5%', anim: 'floatOrb3', dur: 18 },
@@ -977,29 +951,6 @@ function createHeroOrbs() {
         `;
         container.appendChild(el);
     });
-}
-
-// ============ FALLING PETALS ============
-function createFallingPetals() {
-    const container = document.getElementById('fallingPetals');
-    const colors = ['#E8A0BF', '#F2C6DE', '#C4B1E0', '#ffb7c5', '#ffc0cb', '#dcc6f0', '#f0c6d6'];
-    const animations = ['petalFall1', 'petalFall2', 'petalFall3'];
-    for (let i = 0; i < 18; i++) {
-        const petal = document.createElement('div');
-        petal.className = 'falling-petal';
-        const size = Math.random() * 10 + 6;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const anim = animations[Math.floor(Math.random() * animations.length)];
-        const duration = Math.random() * 10 + 12;
-        const delay = Math.random() * 20;
-        const left = Math.random() * 100;
-        petal.style.cssText = `
-            width:${size}px; height:${size * 1.4}px;
-            background:${color}; left:${left}%;
-            animation:${anim} ${duration}s ${delay}s linear infinite;
-        `;
-        container.appendChild(petal);
-    }
 }
 
 // ============ SCROLL REVEAL ============
@@ -1207,7 +1158,6 @@ function resetOrder() {
 // ============ INIT ============
 document.addEventListener('DOMContentLoaded', () => {
     createHeroOrbs();
-    createFallingPetals();
     renderTab0();
     renderTab1();
     renderOrderCart();
