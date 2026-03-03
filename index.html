@@ -392,7 +392,7 @@
         /* Pagination */
         .pagination {
             display: flex; justify-content: center; align-items: center;
-            gap: 0.5rem; margin-top: 2rem;
+            gap: 0.4rem; margin-top: 2rem; flex-wrap: wrap;
         }
         .page-btn {
             width: 42px; height: 42px; border-radius: 50%;
@@ -400,11 +400,24 @@
             color: var(--dark); font-weight: 600; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: all 0.3s; font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
         }
-        .page-btn.active, .page-btn:hover {
+        .page-btn.active {
             background: linear-gradient(135deg, var(--lavender), var(--pink));
             color: white; border-color: transparent;
             box-shadow: 0 4px 15px rgba(155, 126, 200, 0.3);
+            transform: scale(1.1);
+        }
+        .page-btn:not(.active):hover {
+            background: rgba(155, 126, 200, 0.1);
+            border-color: var(--lavender);
+            transform: scale(1.05);
+        }
+        .page-dots {
+            width: 36px; height: 42px; display: flex; align-items: center;
+            justify-content: center; font-weight: 700; font-size: 1.1rem;
+            color: var(--lavender-light); letter-spacing: 1px; user-select: none;
+            pointer-events: none;
         }
         .page-arrow {
             width: 42px; height: 42px; border-radius: 50%;
@@ -413,8 +426,15 @@
             display: flex; align-items: center; justify-content: center;
             transition: all 0.3s; font-family: 'Inter', sans-serif;
         }
-        .page-arrow:hover { background: var(--lavender-light); }
-        .page-arrow:disabled { opacity: 0.4; cursor: not-allowed; }
+        .page-arrow:hover:not(:disabled) {
+            background: var(--lavender); color: white; border-color: var(--lavender);
+            transform: scale(1.05);
+        }
+        .page-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+        .pagination-info {
+            display: block; text-align: center; margin-top: 0.75rem;
+            font-size: 0.82rem; color: #8a7a9a; font-weight: 500;
+        }
         /* ===== Contact Section ===== */
         .contact-section {
             background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 100%);
@@ -556,6 +576,12 @@
                 padding: 0.6rem 1rem;
                 font-size: 0.8rem;
             }
+            .page-btn, .page-arrow {
+                width: 36px; height: 36px; font-size: 0.8rem;
+            }
+            .page-dots {
+                width: 28px; height: 36px; font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -693,10 +719,12 @@
         <div id="tab-content-1" style="display: none;">
             <div class="products-grid full-collection" id="grid-1"></div>
             <div class="pagination" id="pagination-1"></div>
+            <div class="pagination-info" id="pagination-info-1"></div>
         </div>
         <div id="tab-content-2" style="display: none;">
             <div class="products-grid full-collection" id="grid-2"></div>
             <div class="pagination" id="pagination-2"></div>
+            <div class="pagination-info" id="pagination-info-2"></div>
         </div>
     </div>
 </section>
@@ -854,7 +882,6 @@ const bestProducts = [
     { id: "best-6", name: "Фантом", desc: "Гигантские белые метёлки до 40 см — впечатляющий сорт для парадных композиций", price: "3 590", priceNum: 3590, badge: "Premium", badgeColor: "#9B7EC8", bg: "linear-gradient(135deg, #f5e6ff, #e0f0ff)", emoji: "👻" }
 ];
 
-// Метельчатые гортензии (Tab 1)
 const panicleVarieties = [
     { id: "pan-1", name: "Пинки Винки", desc: "Двухцветная бело-розовая красавица с конусовидными метёлками до 25 см", price: "3 490", priceNum: 3490, badge: "Хит", badgeColor: "#E8A0BF", bg: "linear-gradient(135deg, #ffe0f0, #f5e6ff)", emoji: "🩷" },
     { id: "pan-2", name: "Строберри Блоссом", desc: "Клубничные оттенки соцветий, напоминающие спелые ягоды в летнем саду", price: "2 990", priceNum: 2990, bg: "linear-gradient(135deg, #ffe0e0, #ffe0f0)", emoji: "🍓" },
@@ -878,7 +905,6 @@ const panicleVarieties = [
     { id: "pan-20", name: "Мэджикал Мунлайт", desc: "Зеленовато-белые крупные метёлки с лунным сиянием, сорт-шедевр селекции", price: "4 590", priceNum: 4590, badge: "Премиум", badgeColor: "#9B7EC8", bg: "linear-gradient(135deg, #e8f5e0, #f0ffe8)", emoji: "🌙" }
 ];
 
-// Крупнолистные гортензии (Tab 2)
 const macrophyllaVarieties = [
     { id: "mac-1", name: "Vanilla Fraise (Ванилла Фрейз)", desc: "Раскидистый кустарник высотой 1,5 м. Соцветия пирамидальной формы, длиной 30-35 см, имеют волшебный ванильно-клубничный оттенок.", price: "1", priceNum: 1, badge: "Хит", badgeColor: "#E8A0BF", bg: "linear-gradient(135deg, #e0f0ff, #e0e6ff)", emoji: "☀️" },
     { id: "mac-2", name: "Bonfire (Бонфаер)", desc: "Высота гортензии 120 см, диаметр 70-80 см, соцветия просто ГРОМАДНЫЕ, до 45-55 см. И самый насыщенный цвет среди красных гортензий!", price: "2", priceNum: 2, badge: "Редкий", badgeColor: "#7BA7D4", bg: "linear-gradient(135deg, #e6e0ff, #ffe0f0)", emoji: "💜" },
@@ -1084,15 +1110,69 @@ function renderTab2() {
     renderPagination(macrophyllaVarieties, currentPage2, 'pagination-2', 2);
 }
 
+function getVisiblePages(currentPage, totalPages) {
+    // Always show: first, last, current, and 1 neighbor on each side
+    const pages = new Set();
+    pages.add(0);                    // first page
+    pages.add(totalPages - 1);       // last page
+    pages.add(currentPage);          // current page
+    if (currentPage - 1 >= 0) pages.add(currentPage - 1);   // prev neighbor
+    if (currentPage + 1 < totalPages) pages.add(currentPage + 1); // next neighbor
+    return Array.from(pages).sort((a, b) => a - b);
+}
+
 function renderPagination(dataArray, currentPageNum, containerId, tabNum) {
     const totalPages = Math.ceil(dataArray.length / PER_PAGE);
     const container = document.getElementById(containerId);
-    let html = `<button class="page-arrow" onclick="changePage(${tabNum}, ${currentPageNum - 1})" ${currentPageNum === 0 ? 'disabled' : ''}>←</button>`;
-    for (let i = 0; i < totalPages; i++) {
-        html += `<button class="page-btn ${i === currentPageNum ? 'active' : ''}" onclick="changePage(${tabNum}, ${i})">${i + 1}</button>`;
+    const infoId = 'pagination-info-' + tabNum;
+    const infoEl = document.getElementById(infoId);
+
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        if (infoEl) infoEl.innerHTML = '';
+        return;
     }
-    html += `<button class="page-arrow" onclick="changePage(${tabNum}, ${currentPageNum + 1})" ${currentPageNum === totalPages - 1 ? 'disabled' : ''}>→</button>`;
+
+    let html = '';
+
+    // Left arrow
+    html += `<button class="page-arrow" onclick="changePage(${tabNum}, ${currentPageNum - 1})" ${currentPageNum === 0 ? 'disabled' : ''} title="Назад">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>`;
+
+    if (totalPages <= 7) {
+        // Show all pages if 7 or fewer
+        for (let i = 0; i < totalPages; i++) {
+            html += `<button class="page-btn ${i === currentPageNum ? 'active' : ''}" onclick="changePage(${tabNum}, ${i})">${i + 1}</button>`;
+        }
+    } else {
+        // Smart pagination with ellipsis
+        const visible = getVisiblePages(currentPageNum, totalPages);
+        let prevPage = -1;
+
+        for (const page of visible) {
+            // Add dots if there's a gap
+            if (prevPage !== -1 && page - prevPage > 1) {
+                html += `<span class="page-dots">···</span>`;
+            }
+            html += `<button class="page-btn ${page === currentPageNum ? 'active' : ''}" onclick="changePage(${tabNum}, ${page})">${page + 1}</button>`;
+            prevPage = page;
+        }
+    }
+
+    // Right arrow
+    html += `<button class="page-arrow" onclick="changePage(${tabNum}, ${currentPageNum + 1})" ${currentPageNum === totalPages - 1 ? 'disabled' : ''} title="Вперёд">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>`;
+
     container.innerHTML = html;
+
+    // Page info text
+    if (infoEl) {
+        const startItem = currentPageNum * PER_PAGE + 1;
+        const endItem = Math.min((currentPageNum + 1) * PER_PAGE, dataArray.length);
+        infoEl.innerHTML = `Показано ${startItem}–${endItem} из ${dataArray.length} сортов`;
+    }
 }
 
 function changePage(tabNum, page) {
