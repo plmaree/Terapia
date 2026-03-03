@@ -146,6 +146,9 @@
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
         }
+        @media (prefers-reduced-motion: reduce) {
+            .hero { animation-duration: 20s; }
+        }
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -154,8 +157,8 @@
         /* Mobile: slower gradient, fewer resources */
         @media (max-width: 768px) {
             .hero {
-                background-size: 300% 300%;
-                animation-duration: 16s;
+                background-size: 260% 260%;
+                animation-duration: 18s;
             }
         }
         /* Floating bubbles/petals — lightweight! */
@@ -294,11 +297,17 @@
         @media (max-width: 1024px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 640px) {
             .products-grid { grid-template-columns: 1fr; }
-            .products-grid.full-collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-            .product-card.expanded { grid-column: span 2; }
-            .product-info { padding: 1rem; }
-            .product-name { font-size: 0.95rem; line-height: 1.2; }
-            .product-desc { font-size: 0.75rem; }
+            .products-grid.full-collection {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.75rem;
+            }
+            .products-grid.full-collection .product-card { min-width: 0; }
+            .product-card.expanded { grid-column: 1 / -1; }
+            .product-info { padding: 0.9rem; }
+            .product-img { height: 150px; font-size: 3.5rem; }
+            .product-name { font-size: 0.9rem; line-height: 1.25; word-break: break-word; }
+            .product-card.expanded .product-name { font-size: 1rem; }
+            .product-desc { font-size: 0.72rem; line-height: 1.4; }
         }
         .product-card {
             background: white; border-radius: 20px; overflow: hidden;
@@ -372,11 +381,15 @@
         .sparkle-container::before {
             content: ''; position: absolute; top: -50%; left: -50%;
             width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(155, 126, 200, 0.1), transparent 30%);
+            background: conic-gradient(from 0deg, transparent, rgba(155, 126, 200, 0.08), transparent 30%);
             animation: sparkleRotate 6s linear infinite;
             opacity: 0; transition: opacity 0.3s; z-index: 0;
         }
         .sparkle-container:hover::before { opacity: 1; }
+        @media (max-width: 768px) {
+            .sparkle-container::before { display: none; }
+            .product-card:hover { transform: none; box-shadow: none; }
+        }
         @keyframes sparkleRotate { to { transform: rotate(360deg); } }
         /* Pagination */
         .pagination {
@@ -902,15 +915,15 @@ function closeMobileMenu() {
 function createPetals() {
     const container = document.getElementById('petals-container');
     const colors = ['#C4B1E0', '#E8A0BF', '#F2C6DE', '#A8C8E8', '#8ECDA8', '#7BA7D4'];
-    // Fewer petals on mobile for better performance
     const isMobile = window.innerWidth <= 768;
-    const count = isMobile ? 12 : 20;
+    const count = isMobile ? 8 : 18;
+    const sizeBase = isMobile ? 8 : 10;
     for (let i = 0; i < count; i++) {
         const petal = document.createElement('div');
         petal.className = 'petal';
-        const size = Math.random() * 20 + 10;
+        const size = Math.random() * 18 + sizeBase;
         const color = colors[Math.floor(Math.random() * colors.length)];
-        const duration = Math.random() * 8 + 8;
+        const duration = Math.random() * 8 + (isMobile ? 10 : 8);
         const delay = Math.random() * 10;
         const left = Math.random() * 100;
         petal.style.cssText = `
