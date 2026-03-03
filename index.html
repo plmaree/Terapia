@@ -392,47 +392,47 @@
         /* Pagination */
         .pagination {
             display: flex; justify-content: center; align-items: center;
-            gap: 0.4rem; margin-top: 2rem; flex-wrap: wrap;
+            gap: 0.75rem; margin-top: 2rem;
         }
-        .page-btn {
-            width: 42px; height: 42px; border-radius: 50%;
-            border: 2px solid var(--lavender-light); background: white;
-            color: var(--dark); font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s; font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
+        .page-counter {
+            display: flex; align-items: center; gap: 0.5rem;
+            background: white; border-radius: 50px;
+            padding: 0.5rem 1.25rem;
+            border: 2px solid rgba(155, 126, 200, 0.15);
+            box-shadow: 0 4px 15px rgba(155, 126, 200, 0.08);
+            font-family: 'Inter', sans-serif;
+            user-select: none;
         }
-        .page-btn.active {
+        .page-current {
+            font-weight: 800; font-size: 1.15rem;
             background: linear-gradient(135deg, var(--lavender), var(--pink));
-            color: white; border-color: transparent;
-            box-shadow: 0 4px 15px rgba(155, 126, 200, 0.3);
-            transform: scale(1.1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .page-btn:not(.active):hover {
-            background: rgba(155, 126, 200, 0.1);
-            border-color: var(--lavender);
-            transform: scale(1.05);
+        .page-separator {
+            font-weight: 500; font-size: 1rem; color: var(--lavender-light);
         }
-        .page-dots {
-            width: 36px; height: 42px; display: flex; align-items: center;
-            justify-content: center; font-weight: 700; font-size: 1.1rem;
-            color: var(--lavender-light); letter-spacing: 1px; user-select: none;
-            pointer-events: none;
+        .page-total {
+            font-weight: 600; font-size: 1rem; color: #8a7a9a;
         }
         .page-arrow {
-            width: 42px; height: 42px; border-radius: 50%;
-            border: 2px solid var(--lavender-light); background: white;
+            width: 44px; height: 44px; border-radius: 50%;
+            border: 2px solid rgba(155, 126, 200, 0.2); background: white;
             color: var(--dark); font-size: 1rem; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: all 0.3s; font-family: 'Inter', sans-serif;
+            box-shadow: 0 3px 10px rgba(155, 126, 200, 0.08);
         }
         .page-arrow:hover:not(:disabled) {
-            background: var(--lavender); color: white; border-color: var(--lavender);
-            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--lavender), var(--pink));
+            color: white; border-color: transparent;
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(155, 126, 200, 0.3);
         }
-        .page-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+        .page-arrow:active:not(:disabled) { transform: scale(0.95); }
+        .page-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
         .pagination-info {
-            display: block; text-align: center; margin-top: 0.75rem;
+            display: block; text-align: center; margin-top: 0.6rem;
             font-size: 0.82rem; color: #8a7a9a; font-weight: 500;
         }
         /* ===== Contact Section ===== */
@@ -576,12 +576,14 @@
                 padding: 0.6rem 1rem;
                 font-size: 0.8rem;
             }
-            .page-btn, .page-arrow {
-                width: 36px; height: 36px; font-size: 0.8rem;
+            .page-arrow {
+                width: 38px; height: 38px;
             }
-            .page-dots {
-                width: 28px; height: 36px; font-size: 0.95rem;
+            .page-counter {
+                padding: 0.4rem 1rem;
             }
+            .page-current { font-size: 1.05rem; }
+            .page-total { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -1110,17 +1112,6 @@ function renderTab2() {
     renderPagination(macrophyllaVarieties, currentPage2, 'pagination-2', 2);
 }
 
-function getVisiblePages(currentPage, totalPages) {
-    // Always show: first, last, current, and 1 neighbor on each side
-    const pages = new Set();
-    pages.add(0);                    // first page
-    pages.add(totalPages - 1);       // last page
-    pages.add(currentPage);          // current page
-    if (currentPage - 1 >= 0) pages.add(currentPage - 1);   // prev neighbor
-    if (currentPage + 1 < totalPages) pages.add(currentPage + 1); // next neighbor
-    return Array.from(pages).sort((a, b) => a - b);
-}
-
 function renderPagination(dataArray, currentPageNum, containerId, tabNum) {
     const totalPages = Math.ceil(dataArray.length / PER_PAGE);
     const container = document.getElementById(containerId);
@@ -1133,41 +1124,22 @@ function renderPagination(dataArray, currentPageNum, containerId, tabNum) {
         return;
     }
 
-    let html = '';
-
-    // Left arrow
-    html += `<button class="page-arrow" onclick="changePage(${tabNum}, ${currentPageNum - 1})" ${currentPageNum === 0 ? 'disabled' : ''} title="Назад">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-    </button>`;
-
-    if (totalPages <= 7) {
-        // Show all pages if 7 or fewer
-        for (let i = 0; i < totalPages; i++) {
-            html += `<button class="page-btn ${i === currentPageNum ? 'active' : ''}" onclick="changePage(${tabNum}, ${i})">${i + 1}</button>`;
-        }
-    } else {
-        // Smart pagination with ellipsis
-        const visible = getVisiblePages(currentPageNum, totalPages);
-        let prevPage = -1;
-
-        for (const page of visible) {
-            // Add dots if there's a gap
-            if (prevPage !== -1 && page - prevPage > 1) {
-                html += `<span class="page-dots">···</span>`;
-            }
-            html += `<button class="page-btn ${page === currentPageNum ? 'active' : ''}" onclick="changePage(${tabNum}, ${page})">${page + 1}</button>`;
-            prevPage = page;
-        }
-    }
-
-    // Right arrow
-    html += `<button class="page-arrow" onclick="changePage(${tabNum}, ${currentPageNum + 1})" ${currentPageNum === totalPages - 1 ? 'disabled' : ''} title="Вперёд">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    </button>`;
+    const html = `
+        <button class="page-arrow" onclick="changePage(${tabNum}, ${currentPageNum - 1})" ${currentPageNum === 0 ? 'disabled' : ''} title="Назад">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="page-counter">
+            <span class="page-current">${currentPageNum + 1}</span>
+            <span class="page-separator">/</span>
+            <span class="page-total">${totalPages}</span>
+        </div>
+        <button class="page-arrow" onclick="changePage(${tabNum}, ${currentPageNum + 1})" ${currentPageNum === totalPages - 1 ? 'disabled' : ''} title="Вперёд">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    `;
 
     container.innerHTML = html;
 
-    // Page info text
     if (infoEl) {
         const startItem = currentPageNum * PER_PAGE + 1;
         const endItem = Math.min((currentPageNum + 1) * PER_PAGE, dataArray.length);
