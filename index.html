@@ -1082,8 +1082,8 @@ function createCard(product) {
             <div class="product-desc">${product.desc}</div>
             <div class="product-bottom">
                 <div>
-                    <span class="product-price">${product.price} ₽</span>
-                    ${product.oldPrice ? `<span class="product-old-price">${product.oldPrice} ₽</span>` : ''}
+                    <span class="product-price">${product.price} р.</span>
+                    ${product.oldPrice ? `<span class="product-old-price">${product.oldPrice} р.</span>` : ''}
                 </div>
                 <div class="cart-control-wrapper">${getCartControlHTML(product)}</div>
             </div>
@@ -1276,7 +1276,7 @@ function renderOrderCart() {
                     <span style="font-size: 1.5rem;">${item.product.emoji}</span>
                     <div>
                         <div style="font-weight: 600; font-size: 0.95rem;">${item.product.name}</div>
-                        <div style="font-size: 0.8rem; color: #8a7a9a;">${item.product.price} ₽ × ${item.quantity}</div>
+                        <div style="font-size: 0.8rem; color: #8a7a9a;">${item.product.price} р. × ${item.quantity}</div>
                     </div>
                 </div>
                 <div class="cart-item-right">
@@ -1294,11 +1294,11 @@ function renderOrderCart() {
         });
         container.innerHTML = html;
         totalRow.style.display = 'flex';
-        document.getElementById('cartTotalPrice').textContent = formatNumber(totalPrice) + ' ₽';
+        document.getElementById('cartTotalPrice').textContent = formatNumber(totalPrice) + ' р.';
         badge.style.display = 'inline-flex';
         badge.textContent = total + ' ' + pluralize(total);
         submitBtn.disabled = false;
-        submitBtn.textContent = '💐 Отправить заказ на ' + formatNumber(totalPrice) + ' ₽';
+        submitBtn.textContent = '💐 Отправить заказ на ' + formatNumber(totalPrice) + ' р.';
         hint.style.display = 'none';
     }
 }
