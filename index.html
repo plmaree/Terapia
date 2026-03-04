@@ -150,6 +150,7 @@
             .product-card.expanded { grid-column: 1 / -1; }
             .product-info { padding: 0.9rem; }
             .product-img { height: 150px; font-size: 3.5rem; }
+            .product-actual-img { height: 100% !important; width: 100% !important; } /* Ensure full coverage on small screens */
             .product-name { font-size: 0.9rem; line-height: 1.25; word-break: break-word; }
             .product-card.expanded .product-name { font-size: 1rem; }
             .product-desc { font-size: 0.72rem; line-height: 1.4; }
@@ -158,7 +159,7 @@
         .product-card:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(155, 126, 200, 0.2); }
         .product-card.expanded { transform: translateY(-6px) scale(1.02); box-shadow: 0 25px 60px rgba(155, 126, 200, 0.25); }
         .product-img { height: 200px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
-        .product-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.05), transparent); }
+        .product-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.05), transparent); z-index: 0;}
         .product-badge { position: absolute; top: 12px; left: 12px; padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; color: white; z-index: 2; }
         .product-info { padding: 1.25rem; position: relative; z-index: 1; }
         .product-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem; }
@@ -250,6 +251,16 @@
             .card-qty-num { font-size: 0.7rem; min-width: 16px; }
             .product-cart-btn { width: 32px; height: 32px; min-width: 32px; border-radius: 10px; font-size: 0.85rem; }
             .cart-notification { bottom: 4rem; right: 1rem; font-size: 0.85rem; padding: 0.75rem 1rem; }
+        }
+
+        /* НОВЫЙ CSS ДЛЯ ИЗОБРАЖЕНИЙ */
+        .product-img .product-actual-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ключевое свойство для заполнения контейнера */
+            display: block; /* Устраняет возможные отступы */
+            position: relative; /* Чтобы был выше градиентного оверлея */
+            z-index: 1; /* Чтобы был выше градиентного оверлея */
         }
 
         /* ============================================================
@@ -795,12 +806,12 @@ const panicleVarieties = [
 ];
 
 const macrophyllaVarieties = [
-    { id: "mac-1", name: "Vanilla Fraise (Ванилла Фрейз)", desc: "Раскидистый кустарник высотой 1,5 м. Соцветия пирамидальной формы, длиной 30-35 см, имеют волшебный ванильно-клубничный оттенок.", price: "1", priceNum: 1, badge: "Хит", badgeColor: "#E8A0BF", bg: "linear-gradient(135deg, #e0f0ff, #e0e6ff)", emoji: "<img src=\"img/Vanilla Fraise (Ванилла Фрейз).jpg\" alt=\"Vanilla Fraise гортензия\" style=\"width: 100%; height: 100%; object-fit: cover; display: block;\">" },
+    { id: "mac-1", name: "Vanilla Fraise (Ванилла Фрейз)", desc: "Раскидистый кустарник высотой 1,5 м. Соцветия пирамидальной формы, длиной 30-35 см, имеют волшебный ванильно-клубничный оттенок.", price: "1", priceNum: 1, badge: "Хит", badgeColor: "#E8A0BF", bg: "linear-gradient(135deg, #e0f0ff, #e0e6ff)", emoji: "<img src=\"img/Vanilla Fraise (Ванилла Фрейз).jpg\" alt=\"Vanilla Fraise гортензия\">" },
     { id: "mac-2", name: "Bonfire (Бонфаер)", desc: "Высота гортензии 120 см, диаметр 70-80 см, соцветия просто ГРОМАДНЫЕ, до 45-55 см. И самый насыщенный цвет среди красных гортензий!", price: "2", priceNum: 2, badge: "Редкий", badgeColor: "#7BA7D4", bg: "linear-gradient(135deg, #e6e0ff, #ffe0f0)", emoji: "💜" },
     { id: "mac-3", name: "Metallica (Металлика).", desc: "Куст компактный, густой, высотой до 1.5 м, шириной до 1 м, хорошо держит форму. Цветет с июля по октябрь.", price: "3", priceNum: 3, bg: "linear-gradient(135deg, #ffe0e8, #ffe0f0)", emoji: "🌺" },
     { id: "mac-4", name: "Граундбрейкер (Groundbreaker)", desc: "Карликовая и очень компактная метельчатая гортензия. Этот сорт не превышает 40 см во всех направлениях!", price: "4", priceNum: 4, bg: "linear-gradient(135deg, #ffe0d0, #ffe0e0)", emoji: "🔴" },
     { id: "mac-5", name: "Little Lime Punch (Литл Лайм Панч)", desc: "Компактная, красочная и легкая в выращивании на любом пространстве и месте. Высота — 0.9−1.5 м. Ширина — 0.9−1.5 м.", price: "5", priceNum: 5, badge: "Премиум", badgeColor: "#9B7EC8", bg: "linear-gradient(135deg, #f5e0e0, #ffe0d8)", emoji: "🏰" },
-    { id: "mac-6", name: "Little Blossom (Литл Блоссом)", desc: "Oтносится к невысоким сортам. Размер взрослого растения может достигать 80-100 см в высоту и около 100 см в диаметре.", price: "6", priceNum: 6, badge: "Эксклюзив", badgeColor: "#7BA7D4", bg: "linear-gradient(135deg, #d0e0ff, #d8e8ff)", emoji: "💎" },
+    { id: "mac-6", "name": "Little Blossom (Литл Блоссом)", desc: "Oтносится к невысоким сортам. Размер взрослого растения может достигать 80-100 см в высоту и около 100 см в диаметре.", price: "6", priceNum: 6, badge: "Эксклюзив", badgeColor: "#7BA7D4", bg: "linear-gradient(135deg, #d0e0ff, #d8e8ff)", emoji: "💎" },
     { id: "mac-7", name: "Little Rosy (Литл Рози)", desc: "Oдна из самых маленьких и очаровательных метельчатых гортензий! Высота ее достигает всего 60 см. Цветочных шапок так много, что почти не видно листьев.", price: "7", priceNum: 7, badge: "Популярный", badgeColor: "#7BA7D4", bg: "linear-gradient(135deg, #d0e0ff, #e0e8ff)", emoji: "🔵" },
     { id: "mac-8", name: "Little Passion (Литл Пэшн)", desc: "Карликовый компактный сорт: высота куста составляет не более 0.6 м, а его диаметр может доходить до 0.8 м за счет вазообразной формы. Соцветия 15-20 см, округлые и плотные.", price: "8", priceNum: 8, bg: "linear-gradient(135deg, #f5f5ff, #fff)", emoji: "⚪" },
     { id: "mac-9", name: "Little Fresco (Литл Фреско)", desc: "Mетельчатая гортензия, которая растет всего до 80 см. Зацветает она зеленовато-белыми цветами, постепенно становясь цвета лайма.", price: "9", priceNum: 9, bg: "linear-gradient(135deg, #d8e8ff, #e0f0ff)", emoji: "🦚" },
@@ -1048,10 +1059,23 @@ function getCartControlHTML(product) {
 }
 
 function createCard(product) {
+    // Проверяем, содержит ли строка emoji тег <img>
+    const isImage = product.emoji.includes('<img');
+
+    let mainContent;
+    if (isImage) {
+        // Если это изображение, очищаем от inline-стилей и добавляем наш класс
+        let cleanImgHtml = product.emoji.replace(/style="[^"]*"/, ''); // Удаляем существующие inline-стили
+        mainContent = cleanImgHtml.replace('<img', '<img class="product-actual-img"');
+    } else {
+        // Если это обычный эмодзи, оборачиваем его в span
+        mainContent = `<span style="position:relative;z-index:1;">${product.emoji}</span>`;
+    }
+
     return `<div class="product-card sparkle-container" data-product-card data-product-id="${product.id}">
         <div class="product-img" style="background: ${product.bg};">
             ${product.badge ? `<span class="product-badge" style="background: ${product.badgeColor};">${product.badge}</span>` : ''}
-            <span style="position:relative;z-index:1;">${product.emoji}</span>
+            ${mainContent}
         </div>
         <div class="product-info">
             <div class="product-name">${product.name}</div>
