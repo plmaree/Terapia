@@ -552,33 +552,43 @@
             </div>
             <div style="height: 1px; background: linear-gradient(90deg, transparent, rgba(155,126,200,0.3), transparent); margin-bottom: 2rem;"></div>
             <h3 class="font-display" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem;">📝 Контактные данные</h3>
+            
+            <!-- ФОРМА ОБНОВЛЕНА ДЛЯ ОТПРАВКИ -->
             <form id="orderForm" onsubmit="handleOrderSubmit(event)">
+                <!-- СКРЫТЫЕ ПОЛЯ ДЛЯ СЕРВИСА И КОРЗИНЫ -->
+                <input type="hidden" name="access_key" value="ВСТАВЬ_СЮДА_СВОЙ_КЛЮЧ">
+                <input type="hidden" name="order_items" id="hiddenOrderItems">
+                <input type="hidden" name="total_price_formatted" id="hiddenTotalPrice">
+                <input type="hidden" name="subject" value="Новый заказ с сайта Цветочная Терапия">
+                <input type="hidden" name="from_name" value="Магазин Гортензий">
+
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
                     <div>
                         <label style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; color: var(--dark-secondary);">Ваше имя *</label>
-                        <input type="text" class="order-input" id="orderName" placeholder="Например, Анна" required>
+                        <input type="text" name="customer_name" class="order-input" id="orderName" placeholder="Например, Анна" required>
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; color: var(--dark-secondary);">Email *</label>
-                        <input type="email" class="order-input" id="orderEmail" placeholder="anna@example.com" required>
+                        <label style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; color: var(--dark-secondary);">Email (необязательно)</label>
+                        <input type="email" name="customer_email" class="order-input" id="orderEmail" placeholder="anna@example.com">
                     </div>
                 </div>
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; color: var(--dark-secondary);">Номер телефона *</label>
-                    <input type="tel" class="order-input" id="orderPhone" placeholder="+375 (ХХ) 123-45-67" required>
+                    <input type="tel" name="customer_phone" class="order-input" id="orderPhone" placeholder="+375 (ХХ) 123-45-67" required>
                 </div>
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; color: var(--dark-secondary);">Комментарий к заказу (необязательно)</label>
-                    <textarea class="order-input order-textarea" id="orderComment" placeholder="Укажите пожелания по доставке, упаковке или любую другую информацию..."></textarea>
+                    <textarea name="customer_comment" class="order-input order-textarea" id="orderComment" placeholder="Укажите пожелания по доставке, упаковке или любую другую информацию..."></textarea>
                 </div>
                 <button type="submit" class="order-submit" id="orderSubmitBtn" disabled>🌿 Добавьте товары в корзину</button>
                 <p id="orderHint" style="text-align: center; margin-top: 0.75rem; color: #8a7a9a; font-size: 0.85rem;">Чтобы оформить заказ, сначала добавьте товары в корзину</p>
             </form>
         </div>
+
         <div class="order-form-card order-success" id="orderSuccessCard" style="display: none;">
             <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
-            <h3 class="font-display" style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; color: var(--dark);">Спасибо за заказ!</h3>
-            <p style="color: #6b5b7b; line-height: 1.7; margin-bottom: 1.5rem; font-size: 1.05rem;">Мы получили вашу заявку и свяжемся с вами в ближайшее время для подтверждения.</p>
+            <h3 class="font-display" style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; color: var(--dark);">Заказ отправлен!</h3>
+            <p style="color: #6b5b7b; line-height: 1.7; margin-bottom: 1.5rem; font-size: 1.05rem;">Мы получили вашу заявку на почту и свяжемся с вами в ближайшее время для подтверждения.</p>
             <p id="orderSuccessInfo" style="color: #8a7a9a; font-size: 0.9rem; margin-bottom: 2rem;"></p>
             <button class="cta-btn" style="animation: none; opacity: 1; transform: none;" onclick="resetOrder()">Новый заказ 🌸</button>
         </div>
@@ -692,38 +702,38 @@ const macrophyllaVarieties = [
     { id: "mac-58", name: "Pinky Promise (Пинки Промис)", desc: "Куст имеет небольшие размеры. Высота 70–80 см, ширина 80–90 см.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "💗" },
     { id: "mac-59", name: "Pinkachu (Пинкачу)", desc: "Компактный куст - 0,8-1 м. Цветение обильное, начинается раньше, чем у большинства других сортов.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "💗" },
     { id: "mac-60", name: "Tickled Pink (Тиклед Пинк)", desc: "Раннецветущий сорт, имеет широко раскидистый куст ассиметричной формы высотой 1,2-1,5 м, а диаметром 1,2-1,5 м", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "💗" },
-    { id: "mac-61", name: "Strawberry Blossom (Стробери Блоссом)", desc: "Нежные бело-розовые соцветия с оттенками клубники, создают романтичное настроение в саду", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0e0, #ffe6f0)", emoji: "🍓" },
-    { id: "mac-62", name: "Sundae Fraise (Сандей Фрайс)", desc: "Кремово-розовые метёлки, напоминающие ванильное мороженое с клубничным соусом", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #fff0e0, #ffe6f0)", emoji: "🍨" },
-    { id: "mac-63", name: "Fraise Melba (Фрайс Мельба)", desc: "Элегантные розовые соцветия с кремовыми оттенками, изысканный сорт для ценителей", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "🍒" },
-    { id: "mac-64", name: "Colorful Cocktail (Колорфулл Коктейль)", desc: "Яркие многоцветные соцветия, создающие эффект праздника в любом саду", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0f0, #ffe0d0)", emoji: "🍸" },
-    { id: "mac-65", name: "Milk and Honey (Милк энд Хани)", desc: "Кремово-желтые соцветия с нежным ванильным оттенком, словно сладкий десерт", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #fff5e0, #fff0e6)", emoji: "🍯" },
-    { id: "mac-66", name: "Cotton Cream (Коттон Крим)", desc: "Пышные белоснежные соцветия, напоминающие облака из ваты", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #fff)", emoji: "☁️" },
-    { id: "mac-67", name: "Sugar Rush (Шугар Раш)", desc: "Интенсивно-розовые соцветия с ярким, бодрящим цветом", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #ffe0e0)", emoji: "🍭" },
-    { id: "mac-68", name: "Diamant Rouge (Даймонд Руж)", desc: "Глубокий бордовый цвет соцветий, как драгоценный рубин", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0e0, #ffe0d0)", emoji: "💎" },
-    { id: "mac-69", name: "Red Velvet (Рэд Вельвет)", desc: "Насыщенные бордовые соцветия с бархатистым оттенком", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0e0, #ffe0d0)", emoji: "🍷" },
-    { id: "mac-70", name: "Secret Pink (Сикрет Пинк)", desc: "Тайна в каждом бутоне - нежные розовые соцветия с загадочным оттенком", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "🔒" },
-    { id: "mac-71", name: "Pinkachu (Пинкачу)", desc: "Яркие розовые соцветия, вдохновленные популярным персонажем", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "⚡" },
-    { id: "mac-72", name: "Silver Dollar (Сильвер Доллар)", desc: "Серебристо-белые соцветия с перламутровым блеском", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f0f5, #e8e8f0)", emoji: "🪙" },
-    { id: "mac-73", name: "Minty Spirit (Минти Спирит)", desc: "Освежающие зеленовато-белые соцветия с мятным оттенком", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #e6ffe0, #f0ffe6)", emoji: "🌿" },
-    { id: "mac-74", name: "Summer Snow (Саммер Сноу)", desc: "Снежно-белые соцветия, освещающие сад в жаркое лето", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #fff)", emoji: "❄️" },
-    { id: "mac-75", name: "Summer Breeze (Саммер Бриз)", desc: "Легкие кремово-розовые соцветия, словно летний ветерок", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #fff0e0, #ffe6f0)", emoji: "💨" },
-    { id: "mac-76", name: "Baby Lace (Бейби Лейс)", desc: "Нежные кремовые соцветия с воздушной текстурой", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #fff5f0, #fff0f5)", emoji: "👶" },
-    { id: "mac-77", name: "Bobo (Бобо)", desc: "Компактный сорт с пышными белыми соцветиями", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #fff)", emoji: "🧸" },
-    { id: "mac-78", name: "Pixio (Пиксио)", desc: "Миниатюрные соцветия с игривым характером", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #e6e0ff, #f0e6ff)", emoji: "🧚‍♀️" },
-    { id: "mac-79", name: "Самарская Лидия", desc: "Русский сорт с нежными розовыми соцветиями", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "🇷🇺" },
-    { id: "mac-80", name: "Жемчужина фестиваля", desc: "Белоснежные соцветия с перламутровым блеском", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #fff)", emoji: "💎" },
-    { id: "mac-81", name: "Краса Лесково", desc: "Традиционный русский сорт с яркими розовыми цветами", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #ffe0e0)", emoji: "🌸" },
-    { id: "mac-82", name: "Polar Bear (Полар Беар)", desc: "Огромные белоснежные соцветия, как полярный медведь", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #e8f0ff)", emoji: "🐻‍❄️" },
-    { id: "mac-83", name: "Phantom (Фантом)", desc: "Таинственные белые соцветия с легким серым оттенком", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f0f5, #e8e8f0)", emoji: "👻" },
-    { id: "mac-84", name: "Skyfall (Скайфол)", desc: "Голубовато-белые соцветия, как небо в закатный час", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #e0f0ff, #e0e6ff)", emoji: "🌤️" },
-    { id: "mac-85", name: "Infinity (Инфинити)", desc: "Бесконечно красивые соцветия с переходом от белого к розовому", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "♾️" },
-    { id: "mac-86", name: "Mega Mindy (Мега Минди)", desc: "Крупные темно-розовые соцветия с мощным цветением", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #ffe0e0)", emoji: "💪" },
-    { id: "mac-87", name: "Royal Flower (Роял Флауэр)", desc: "Королевские соцветия с насыщенным розовым цветом", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #ffe0e0)", emoji: "👑" },
-    { id: "mac-88", name: "Angel's Blush (Энжел Блаш)", desc: "Нежные розовые соцветия, как румянец ангела", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "👼" },
-    { id: "mac-89", name: "Unique (Юник)", desc: "Уникальные соцветия с необычной формой и окраской", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #e6e0ff, #f0e6ff)", emoji: "✨" },
-    { id: "mac-90", name: "Tardiva (Тардива)", desc: "Позднецветущий сорт с белыми конусовидными соцветиями", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5f0, #f5fff5)", emoji: "🍂" },
-    { id: "mac-91", name: "Dolly (Долли)", desc: "Очаровательные розовые соцветия, как кукольные", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "🧸" },
-    { id: "mac-92", name: "Graffiti (Граффити)", desc: "Яркие соцветия с необычным окрасом, как уличное искусство", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0f0, #ffe0d0)", emoji: "🎨" }
+    { id: "mac-61", name: "Strawberry Blossom (Стробери Блоссом)", desc: "Компактный (1–1,2 м) морозостойкий кустарник с очень крупными (до 30-35 см) конусовидными соцветиями. Цветет с июля по сентябрь, меняя цвет от сливочно-белого к насыщенно-розовому/малиновому, сохраняя белую вершину. Идеальна для малых садов и живых изгородей.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0e0, #ffe6f0)", emoji: "🍓" },
+    { id: "mac-62", name: "Sundae Fraise (Сандей Фрайс)", desc: "Компактный, неприхотливый кустарник (1–1.3 м в высоту и ширину) с густой шаровидной кроной. Ценится за обильное цветение с июля по октябрь: крупные метелки (до 30 см) меняют цвет от кремово-белого до насыщенно-розового, напоминая клубничное мороженое.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #fff0e0, #ffe6f0)", emoji: "🍨" },
+    { id: "mac-63", name: "Fraise Melba (Фрайс Мельба)", desc: "Высокорослый (до 2 м) декоративный кустарник с очень жесткими, темно-бордовыми побегами, не требующими подвязки. Отличается крупными (до 40-50 см) пирамидальными соцветиями, которые меняют цвет с молочно-белого на насыщенно-розовый/винно-красный снизу вверх, сохраняя белую вершину. Морозостойка (до -30С), цветет с июля по сентябрь.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "🍒" },
+    { id: "mac-64", name: "Colorful Cocktail (Колорфулл Коктейль)", desc: "Компактный сорт (до 1 м в высоту и ширину) с прочными ветвями, меняющий окрас соцветий с кремово-белого на темно-розовый с июля по сентябрь. Куст неприхотлив, зимостоек (до-30C), подходит для живых изгородей, контейнеров и малых садов. ", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0f0, #ffe0d0)", emoji: "🍸" },
+    { id: "mac-65", name: "Milk and Honey (Милк энд Хани)", desc: " Компактный, низкорослый сорт (новинка 2022 года) высотой и шириной около 50-70 см. Ценится за обильное цветение с июля по сентябрь-октябрь. Соцветия (15-20 см) меняют цвет от сливочно-кремового до нежно-розового, отлично подходит для контейнеров и малых садов.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #fff5e0, #fff0e6)", emoji: "🍯" },
+   { id: "mac-66", name: "Cotton Cream (Коттон Крим)", desc: "Компактный сорт высотой и шириной около 70-90 см с аккуратной округлой кроной. Цветет обильно с июля по октябрь. Соцветия (15-20 см) при распускании зеленоватые, затем становятся сливочно-кремовыми, а к концу сезона слегка розовеют, отлично подходит для выращивания в контейнерах, патио и на небольших клумбах.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #fff)", emoji: "☁️" },
+    { id: "mac-67", name: "Sugar Rush (Шугар Раш)", desc: "Компактный кустарник высотой 80-100 см с крепкими прямостоячими побегами, не требующими опоры. Цветет с июля до конца сентября. Соцветия (20-30 см) плотные, в начале фисташково-белые, затем ослепительно-белые, а к осени приобретают розоватый румянец, идеально смотрится на переднем плане цветника и в вазонах.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #ffe0e0)", emoji: "🍭" },
+    { id: "mac-68", name: "Diamant Rouge (Даймонд Руж)", desc: "Эффектный кустарник высотой 1,3-1,5 м и шириной до 1,5 м. Цветет с июля по сентябрь. Крупные пышные соцветия (до 30-40 см) раскрываются белыми, но быстро розовеют и к августу-сентябрю приобретают насыщенный рубиново-красный цвет. Декоративна и листва, которая осенью становится оранжево-пурпурной.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0e0, #ffe0d0)", emoji: "💎" },
+    { id: "mac-69", name: "Red Velvet (Рэд Вельвет)", desc: "Компактный куст веерообразной формы высотой до 1,2 м и шириной около 1 м с толстыми прочными побегами. Цветет с июля по сентябрь. Крупные плотные метелки (20-25 см) зацветают белым, затем переходят в темно-розовые тона и завершают цветение глубоким рубиновым оттенком. Рекомендуется для одиночных посадок и невысокой живой изгороди.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0e0, #ffe0d0)", emoji: "🍷" },
+    { id: "mac-70", name: "Secret Pink (Сикрет Пинк)", desc: "Компактный и таинственный сорт высотой около 100-120 см с пышной кроной и прочными побегами. Цветет с середины лета до заморозков. Нежные соцветия распускаются белыми, а затем постепенно покрываются загадочным розовым оттенком, сохраняя романтичный вид до глубокой осени. Прекрасно смотрится в миксбордерах.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "🔒" },
+    { id: "mac-71", name: "Pinkachu (Пинкачу)", desc: "Компактный и крепкий кустарник высотой 0,9-1,2 м с густой шаровидной кроной и прочными бордово-коричневыми побегами. Цветение начинается рано, с конца июня – июля. Крупные конические соцветия (до 25 см) из зеленовато-белых становятся белыми, а к осени окрашиваются в яркий насыщенно-розовый цвет, отлично подходит для малых садов и контейнеров.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "⚡" },
+    { id: "mac-72", name: "Silver Dollar (Сильвер Доллар)", desc: "Эффектный раскидистый куст высотой 1,5-2 м с ровной округлой кроной и крепкими вертикальными побегами. Цветет с июля по сентябрь. Огромные пирамидальные соцветия (25-30 см) распускаются зеленоватыми, быстро становятся белоснежными с зеленым конусом на макушке, а к осени могут приобретать легкий сиренево-розоватый румянец, сорт неприхотлив и универсален в ландшафтном дизайне.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f0f5, #e8e8f0)", emoji: "🪙" },
+    { id: "mac-73", name: "Minty Spirit (Минти Спирит)", desc: "Компактная новинка высотой и шириной около 1 м с прочными ветвями. Цветет обильно с июля по сентябрь. Плотные соцветия (до 25-35 см) отличаются освежающим мятно-кремовым оттенком, который остается стабильно бело-зеленоватым и не розовеет к осени. Прекрасный выбор для светлых акцентов в саду.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #e6ffe0, #f0ffe6)", emoji: "🌿" },
+    { id: "mac-74", name: "Summer Snow (Саммер Сноу)", desc: "Плотный и компактный кустарник высотой 0,8-1 м. Цветет с июля до сентября, напоминая «летние сугробы». Соцветия (25-30 см) состоят из крупных стерильных цветков чисто-белого цвета, которые практически не меняют окраску, лишь в самом конце сезона могут слегка порозоветь. Прекрасно подходит для парадных участков и срезки.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #fff)", emoji: "❄️" },
+    { id: "mac-75", name: "Summer Breeze (Саммер Бриз)", desc: "Компактный и пышный куст высотой около 80-100 см с красивой симметричной кроной. Цветет с июля до октября. Плотные округло-пирамидальные соцветия распускаются с яркими лаймовыми нотками, затем становятся сливочно-белыми и фисташковыми. Идеальна для создания низких бордюров и контейнерного выращивания на террасах.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #fff0e0, #ffe6f0)", emoji: "💨" },
+    { id: "mac-76", name: "Baby Lace (Бейби Лейс)", desc: "Очаровательный карликовый сорт высотой 0,9-1,2 м с прочными, не разваливающимися побегами. Цветет с июля до первых морозов. Нежные белые соцветия (15-20 см) ближе к осени покрываются красными крапинками, из-за чего фактура кажется ажурным кружевом. Отлично подходит для маленьких садиков, переднего плана клумб и кашпо.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #fff5f0, #fff0f5)", emoji: "👶" },
+    { id: "mac-77", name: "Bobo (Бобо)", desc: "Популярный карликовый сорт высотой всего 60-70 см, образующий плотную цветущую сферу. Цветет с июля по сентябрь настолько обильно, что за пышными соцветиями (до 20-30 см) почти не видно листвы. Цветки изначально зеленовато-лимонные, затем белые, а к осени приобретают нежно-розовый оттенок. Идеально подходит для живых изгородей и вазонов.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #fff)", emoji: "🧸" },
+    { id: "mac-78", name: "Pixio (Пиксио)", desc: "Суперкомпактная и густоцветущая новинка высотой и шириной всего около 80 см. Образует огромное количество соцветий с июня по октябрь. Крупные метелки (до 30 см) обладают уникальной игрой красок: от бело-лаймово-зеленого до салатово-белого, а в конце сезона становятся ярко-розовыми. Отличный сорт-хамелеон для патио.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #e6e0ff, #f0e6ff)", emoji: "🧚‍♀️" },
+    { id: "mac-79", name: "Самарская Лидия", desc: "Знаменитый компактный кустарник высотой 1,2-1,3 м с темными бордово-красными побегами и темно-зеленой листвой. Цветет с июля по сентябрь. Плотные конусовидные соцветия (до 20 см) распускаются белыми с зеленоватой верхушкой, но очень быстро окрашиваются в яркий малиново-рубиновый цвет. Считается одним из самых ярких осенних сортов.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "🇷🇺" },
+    { id: "mac-80", name: "Жемчужина фестиваля", desc: "Оригинальный кустарник высотой около 1,5 м с компактной округлой кроной. Цветет с конца июня по октябрь. Соцветия (до 20 см) состоят из широко расставленных цветков в форме бабочек. Цвет меняется от сливочно-лаймового до ослепительно-белого с розовой каймой, а в конце становится ярко-розовым со светло-кофейным тоном.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #fff)", emoji: "💎" },
+    { id: "mac-81", name: "Краса Лесково", desc: "Мощный сорт отечественной селекции высотой 1,2-1,5 м с сильными красно-коричневыми побегами. Цветет с начала июля до конца сентября. Крупные ширококонические соцветия (25-30 см) распускаются белыми, затем плавно приобретают нежно-розовые тона, а к концу цветения становятся ярко-розовыми. Прекрасно зимует без укрытия.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #ffe0e0)", emoji: "🌸" },
+    { id: "mac-82", name: "Polar Bear (Полар Беар)", desc: "Мощный и исключительно зимостойкий кустарник высотой 1,8-2 м. Цветет с июля до заморозков. Сорт славится гигантскими густыми соцветиями (до 40 см), которые в начале цветения имеют фисташковый оттенок, затем становятся белоснежными, а осенью покрываются нежно-розовым румянцем. Отлично смотрится в одиночной посадке или на штамбе.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5ff, #e8f0ff)", emoji: "🐻‍❄️" },
+    { id: "mac-83", name: "Phantom (Фантом)", desc: "Крупный раскидистый кустарник высотой 2-2,5 м с крепкими вертикальными побегами. Цветет с июля по октябрь рекордными по размеру метелками (до 40-50 см). Цветки распускаются светло-зелеными, затем становятся кремово-белыми, а ближе к осени приобретают нежно-сиренево-розовый румянец. Отличается роскошным медовым ароматом и высокой выносливостью.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f0f5, #e8e8f0)", emoji: "👻" },
+    { id: "mac-84", name: "Skyfall (Скайфол)", desc: "Быстрорастущий кустарник высотой до 1,2 м, известный своими гиацинтовидными соцветиями (до 30 см в длину). Цветет с июля по сентябрь. Огромные пышные метелки состоят из цветков с вытянутыми загнутыми лепестками, которые изначально имеют зеленовато-белый оттенок, затем белеют, а к осени становятся нежно-розовыми.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #e0f0ff, #e0e6ff)", emoji: "🌤️" },
+    { id: "mac-85", name: "Infinity (Инфинити)", desc: "Компактный кустарник высотой до 90-100 см с упругими ветвями. Цветет очень долго (до 150 дней) с июля по сентябрь/октябрь. Рыхлые конические соцветия (15-20 см) начинают цветение чистым белым цветом, а в течение сезона постепенно, но неуклонно окрашиваются в насыщенный темно-красный цвет. Отличный сорт для низких изгородей и вазонов.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "♾️" },
+    { id: "mac-86", name: "Mega Mindy (Мега Минди)", desc: "Яркий и пышный кустарник высотой 1,5-1,8 м с прочными, жесткими побегами, которые не поникают под тяжестью цветов. Цветет с июля по сентябрь. Огромные соцветия (до 30 см) распускаются белыми, затем быстро розовеют и к осени приобретают насыщенный вишнево-малиновый, рубиновый оттенок. Идеальна для создания цветовых акцентов в саду.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #ffe0e0)", emoji: "💪" },
+    { id: "mac-87", name: "Royal Flower (Роял Флауэр)", desc: "Стильный куст среднего размера высотой около 1 м с веерообразной формой кроны. Цветет с июля по сентябрь. Крупные ослепительно-белые соцветия к концу лета приобретают на краях лепестков яркую розовую кайму, оставляя серединку бело-зеленой. Этот «ситцевый» эффект делает ее потрясающе декоративной для небольших участков.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #ffe0e0)", emoji: "👑" },
+    { id: "mac-88", name: "Angel's Blush (Энжел Блаш)", desc: "Высокорослый и величественный кустарник высотой 2,5-3 м с множеством вертикальных побегов. Цветет с июля до заморозков. Крупные конические соцветия (20-30 см) вначале кипельно-белые, затем постепенно покрываются «румянцем ангела» (розовеют), а к осени становятся темно-красными. Идеальна для создания высоких живых изгородей.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "👼" },
+    { id: "mac-89", name: "Unique (Юник)", desc: "Классический кустарник высотой 2-2,5 м, отличающийся очень быстрым ростом и прочными побегами. Цветет с июля по сентябрь. Крупные метелки (до 25-30 см) состоят из ослепительно-белых цветков, которые к осени приобретают слегка розовый румянец. Изумительно пахнет и отлично подходит для срезки в качестве сухоцветов.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #e6e0ff, #f0e6ff)", emoji: "✨" },
+    { id: "mac-90", name: "Tardiva (Тардива)", desc: "Позднецветущий высокорослый сорт (до 2,5-3 м), украшающий сад, когда другие растения уже увядают. Цветет с августа и до самых заморозков. Рыхлые, узкоконические ажурные соцветия (25-30 см) кремово-белого цвета с медовым ароматом постепенно покрываются легким розовым тоном. Прекрасный вариант для пейзажных композиций.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #f0f5f0, #f5fff5)", emoji: "🍂" },
+    { id: "mac-91", name: "Dolly (Долли)", desc: "Компактный и пышный кустарник высотой около 1,5 м с невероятно мощными побегами, которые не гнутся под тяжестью цветов. Цветет с июля по сентябрь. Крупные плотные соцветия (до 30 см) раскрываются белыми, а осенью становятся нежно-розовыми. Источает сладковатый аромат и цветет без перерывов на протяжении всего сезона.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe6f0, #fff0f5)", emoji: "🧸" },
+    { id: "mac-92", name: "Graffiti (Граффити)", desc: "Карликовый кустарник-хамелеон высотой и шириной около 1 м с прочными побегами. Цветет с июля до сентября. Конические соцветия (до 30 см) в начале распускаются ярким цветом лайма, затем белеют, а к концу лета приобретают потрясающую окраску из ярко-розовых, зеленых и белых полос. Настоящая живописная находка для компактной клумбы и контейнеров.", price: "15", priceNum: 15, bg: "linear-gradient(135deg, #ffe0f0, #ffe0d0)", emoji: "🎨" }
 ];
 
 let cart = [];
@@ -777,7 +787,7 @@ function updateLiteButtons() {
         desktopBtn.classList.add('active');
         mobileSmallBtn.innerHTML = '✅';
         mobileSmallBtn.classList.add('active');
-        mobileBtn.innerHTML = '✅ Лёгкий режим включён (нажмите чтобы выключить)';
+        mobileBtn.innerHTML = '✅ Лёгкий режим включён';
         mobileBtn.classList.add('active');
         heroBtn.innerHTML = '✅ Лёгкий режим включён — сайт работает быстрее';
         heroBtn.classList.add('active');
@@ -813,20 +823,16 @@ function initCounters() {
         });
         return;
     }
-
     counters.forEach(c => {
         const suffix = c.getAttribute('data-suffix') || '';
         c.innerText = '0' + suffix;
     });
-
-    // Запускаем анимацию накрутки синхронно с fade-in анимацией (задержка 1.2s для блока)
     setTimeout(() => {
         counters.forEach(counter => {
             const target = +counter.getAttribute('data-target');
             const suffix = counter.getAttribute('data-suffix') || '';
             let startTime = null;
             const duration = 2000;
-
             function updateCounter(currentTime) {
                 if (liteMode) {
                     counter.innerText = target + suffix;
@@ -835,13 +841,9 @@ function initCounters() {
                 if (!startTime) startTime = currentTime;
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                
-                // Плавное замедление в конце
                 const easeOutExpo = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
                 const current = Math.floor(easeOutExpo * target);
-                
                 counter.innerText = current + suffix;
-
                 if (progress < 1) {
                     requestAnimationFrame(updateCounter);
                 } else {
@@ -1180,7 +1182,7 @@ function showNotification(name) {
     container.innerHTML = '';
     const notif = document.createElement('div');
     notif.className = 'cart-notification';
-    notif.textContent = '✅ ' + name + ' добавлен в корзину!';
+    notif.textContent = '✅ ' + name + ' в корзине!';
     container.appendChild(notif);
     if (notifTimeout) clearTimeout(notifTimeout);
     const hideDelay = liteMode ? 1500 : 2000;
@@ -1194,16 +1196,59 @@ function showNotification(name) {
     }, hideDelay);
 }
 
-function handleOrderSubmit(e) {
+// ОБНОВЛЕННАЯ ФУНКЦИЯ ОТПРАВКИ
+async function handleOrderSubmit(e) {
     e.preventDefault();
     if (cart.length === 0) return;
-    const name = document.getElementById('orderName').value;
-    const email = document.getElementById('orderEmail').value;
-    const phone = document.getElementById('orderPhone').value;
-    document.getElementById('orderFormCard').style.display = 'none';
-    document.getElementById('orderSuccessCard').style.display = 'block';
-    document.getElementById('orderSuccessInfo').innerHTML = 'Имя: <strong>' + name + '</strong> | Email: <strong>' + email + '</strong> | Телефон: <strong>' + phone + '</strong>';
+
+    const submitBtn = document.getElementById('orderSubmitBtn');
+    const originalBtnText = submitBtn.textContent;
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Отправка заказа... ⏳";
+
+    // Собираем список товаров для письма
+    const itemsList = cart.map(item => 
+        `- ${item.product.name} (Кол-во: ${item.quantity}, Цена: ${item.product.price} р.)`
+    ).join('\n');
+
+    // Записываем данные в скрытые поля перед отправкой
+    document.getElementById('hiddenOrderItems').value = itemsList;
+    document.getElementById('hiddenTotalPrice').value = getTotalPrice() + ' р.';
+
+    const formData = new FormData(e.target);
+
+    try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const name = document.getElementById('orderName').value;
+            const email = document.getElementById('orderEmail').value || 'не указан';
+            const phone = document.getElementById('orderPhone').value;
+
+            document.getElementById('orderFormCard').style.display = 'none';
+            document.getElementById('orderSuccessCard').style.display = 'block';
+            document.getElementById('orderSuccessInfo').innerHTML = 
+                `Имя: <strong>${name}</strong> | Email: <strong>${email}</strong> | Телефон: <strong>${phone}</strong>`;
+            
+            // Очищаем корзину
+            cart = [];
+            updateCartUI();
+        } else {
+            alert("Ошибка сервера. Попробуйте отправить еще раз или напишите нам в мессенджеры.");
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+        }
+    } catch (error) {
+        alert("Ошибка сети. Проверьте интернет или напишите нам напрямую.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+    }
 }
+
 function resetOrder() {
     cart = [];
     document.getElementById('orderForm').reset();
