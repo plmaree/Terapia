@@ -150,6 +150,21 @@
             .about-card { padding: 1.25rem 1.5rem; }
         }
 
+        /* ===== Поле поиска ===== */
+        .search-container { max-width: 600px; margin: 0 auto 2.5rem; position: relative; z-index: 10; }
+        .search-input { width: 100%; padding: 1rem 3rem 1rem 3rem; border: 2px solid rgba(155, 126, 200, 0.2); border-radius: 50px; font-size: 1rem; font-family: 'Inter', sans-serif; transition: all 0.3s; background: white; color: var(--dark); box-shadow: 0 4px 15px rgba(155, 126, 200, 0.08); }
+        .search-input:focus { outline: none; border-color: var(--lavender); box-shadow: 0 8px 25px rgba(155, 126, 200, 0.2); }
+        .search-input::placeholder { color: #b0a0c0; }
+        .search-icon { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: #b0a0c0; pointer-events: none; }
+        .search-clear { position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: rgba(155, 126, 200, 0.1); border: none; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: var(--dark-secondary); cursor: pointer; font-size: 0.9rem; opacity: 0; pointer-events: none; transition: all 0.2s; }
+        .search-clear.visible { opacity: 1; pointer-events: auto; }
+        .search-clear:hover { background: rgba(155, 126, 200, 0.2); }
+        @media (max-width: 640px) {
+            .search-input { font-size: 0.95rem; padding: 0.85rem 2.5rem 0.85rem 2.5rem; }
+            .search-icon { left: 1rem; }
+            .search-clear { right: 0.8rem; }
+        }
+
         .products-section { background: var(--cream); }
         .slide-tab { padding: 0.8rem 1.8rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; background: white; color: var(--dark-secondary); font-family: 'Inter', sans-serif; }
         .slide-tab.active { background: linear-gradient(135deg, var(--lavender), var(--pink)); color: white; box-shadow: 0 6px 20px rgba(155, 126, 200, 0.35); }
@@ -350,6 +365,7 @@
         body.lite-mode .scroll-top-btn:hover { transform: none !important; }
 
         body.lite-mode .cart-count-badge.bounce { animation: none !important; }
+        body.lite-mode .search-input { box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important; }
 
         body.lite-mode::-webkit-scrollbar { width: auto; }
         body.lite-mode::-webkit-scrollbar-track { background: initial; }
@@ -515,11 +531,21 @@
             <h2 class="section-title">Наша <span class="gradient-text">коллекция</span></h2>
             <p class="section-subtitle">Откройте мир невероятных гортензий — от классических до самых редких экзотических сортов</p>
         </div>
-        <div class="reveal tabs-container" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap;">
+
+        <!-- Поле поиска -->
+        <div class="reveal search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Поиск по названию" oninput="handleSearch()">
+            <button id="searchClear" class="search-clear" onclick="clearSearch()" title="Очистить">✕</button>
+        </div>
+
+        <!-- Вкладки -->
+        <div class="reveal tabs-container" id="tabsContainer" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap;">
             <button class="slide-tab active" id="tab-btn-0" onclick="switchTab(0)">🏆 Хиты сезона</button>
             <button class="slide-tab" id="tab-btn-2" onclick="switchTab(2)">💐 Метельчатые гортензии</button>
             <button class="slide-tab" id="tab-btn-1" onclick="switchTab(1)">🌿 Крупнолистные гортензии</button>
         </div>
+        
         <div id="tab-content-0"><div class="products-grid" id="grid-0"></div></div>
         <div id="tab-content-1" style="display: none;">
             <div class="products-grid full-collection" id="grid-1"></div>
@@ -531,6 +557,18 @@
             <div class="pagination" id="pagination-2"></div>
             <div class="pagination-info" id="pagination-info-2"></div>
         </div>
+
+        <!-- Контейнер результатов поиска -->
+        <div id="search-results-content" style="display: none;">
+            <div style="margin-bottom: 1.5rem; font-weight: 600; color: var(--dark-secondary); text-align: center; font-size: 0.95rem;" id="search-results-info"></div>
+            <div class="products-grid full-collection" id="search-grid"></div>
+            <div id="search-empty" style="text-align: center; padding: 3rem; display: none;">
+                <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">🌸</div>
+                <h3 class="font-display" style="font-size: 1.3rem; margin-bottom: 0.5rem;">Ничего не найдено</h3>
+                <p style="color: #8a7a9a; font-size: 0.95rem;">Попробуйте изменить поисковый запрос</p>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -1337,6 +1375,81 @@ function resetOrder() {
     document.getElementById('orderFormCard').style.display = 'block';
     document.getElementById('orderSuccessCard').style.display = 'none';
     updateCartUI();
+}
+
+function handleSearch() {
+    const input = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('searchClear');
+    const query = input.value.toLowerCase().trim();
+    
+    const tabsContainer = document.getElementById('tabsContainer');
+    const tab0 = document.getElementById('tab-content-0');
+    const tab1 = document.getElementById('tab-content-1');
+    const tab2 = document.getElementById('tab-content-2');
+    const searchContent = document.getElementById('search-results-content');
+    
+    if (query.length > 0) {
+        clearBtn.classList.add('visible');
+        
+        // Hide tabs
+        tabsContainer.style.display = 'none';
+        tab0.style.display = 'none';
+        tab1.style.display = 'none';
+        tab2.style.display = 'none';
+        
+        // Show search results container
+        searchContent.style.display = 'block';
+        
+        // Filter unique products by name to avoid visual duplicates from different tabs
+        const allProducts = getAllProducts();
+        const uniqueProductsMap = new Map();
+        
+        for (const p of allProducts) {
+            if (!uniqueProductsMap.has(p.name)) {
+                uniqueProductsMap.set(p.name, p);
+            } else {
+                // Keep the one that is already in cart if a duplicate exists
+                if (isInCart(p.id)) {
+                    uniqueProductsMap.set(p.name, p);
+                }
+            }
+        }
+        const uniqueProducts = Array.from(uniqueProductsMap.values());
+        
+        const filtered = uniqueProducts.filter(p => p.name.toLowerCase().includes(query));
+        
+        const grid = document.getElementById('search-grid');
+        const emptyMsg = document.getElementById('search-empty');
+        const infoMsg = document.getElementById('search-results-info');
+        
+        if (filtered.length > 0) {
+            grid.innerHTML = filtered.map(createCard).join('');
+            grid.style.display = 'grid';
+            emptyMsg.style.display = 'none';
+            infoMsg.innerHTML = `Найдено ${filtered.length} ${pluralize(filtered.length)}`;
+            infoMsg.style.display = 'block';
+        } else {
+            grid.innerHTML = '';
+            grid.style.display = 'none';
+            emptyMsg.style.display = 'block';
+            infoMsg.style.display = 'none';
+        }
+        
+    } else {
+        clearBtn.classList.remove('visible');
+        
+        // Restore tabs
+        tabsContainer.style.display = 'flex';
+        searchContent.style.display = 'none';
+        switchTab(currentTab);
+    }
+}
+
+function clearSearch() {
+    const input = document.getElementById('searchInput');
+    input.value = '';
+    handleSearch();
+    input.focus();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
